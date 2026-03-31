@@ -7,6 +7,27 @@ export default function Signup() {
   const { signup } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const isValidEmail = (email: string) => {
+    return /\S+@\S+\.\S+/.test(email);
+  };
+
+  const handleSignup = () => {
+    if (!email.trim() || !password.trim()) {
+      setError("Champs obligatoires");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setError("Email invalide");
+      return;
+    }
+
+    signup(email.trim(), password.trim());
+    setError("");
+    router.replace("/login");
+  };
 
   return (
     <View style={styles.container}>
@@ -15,6 +36,7 @@ export default function Signup() {
       <TextInput
         style={styles.input}
         placeholder="Email"
+        value={email}
         onChangeText={setEmail}
       />
 
@@ -22,17 +44,13 @@ export default function Signup() {
         style={styles.input}
         placeholder="Mot de passe"
         secureTextEntry
+        value={password}
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          if (!email || !password) return;
-          signup(email, password);
-          router.replace("/login");
-        }}
-      >
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>S'inscrire</Text>
       </TouchableOpacity>
     </View>
@@ -56,7 +74,7 @@ const styles = StyleSheet.create({
     borderColor: "#cbd5f5",
     padding: 15,
     borderRadius: 10,
-    marginBottom: 15
+    marginBottom: 10
   },
   button: {
     backgroundColor: "#FF7900",
@@ -67,5 +85,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "bold"
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
+    textAlign: "center"
   }
 });

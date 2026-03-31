@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }: any) => {
       email === registeredUser.email &&
       password === registeredUser.password
     ) {
-      setUser({ email });
+      setUser({ email, password });
       setError("");
     } else {
       setError("Mauvais identifiants ");

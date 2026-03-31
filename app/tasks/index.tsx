@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   delete: {
     backgroundColor: "#ef4444",
     padding: 8,
-    borderRadius: 8
+    borderRadius: 8,
   },
   buttons: {
     marginTop: 20,

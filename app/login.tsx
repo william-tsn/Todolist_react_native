@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { router } from "expo-router";
 
 export default function Login() {
-  const { login, user } = useContext(AuthContext);
+  const { login, user, error } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,6 +28,8 @@ export default function Login() {
         secureTextEntry
         onChangeText={setPassword}
       />
+
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <TouchableOpacity style={styles.button} onPress={() => login(email, password)}>
         <Text style={styles.buttonText}>Se connecter</Text>
@@ -73,5 +75,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     textAlign: "center",
     color: "#3b82f6"
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
+    textAlign: "center"
   }
 });

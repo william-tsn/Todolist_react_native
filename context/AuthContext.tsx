@@ -4,14 +4,27 @@ export const AuthContext = createContext<any>(null);
 
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>(null);
+  const [registeredUser, setRegisteredUser] = useState<any>(null);
+  const [error, setError] = useState<string>("");
+
   const [tasks, setTasks] = useState<string[]>([]);
 
   const login = (email: string, password: string) => {
-    setUser({ email, password });
+    if (
+      registeredUser &&
+      email === registeredUser.email &&
+      password === registeredUser.password
+    ) {
+      setUser({ email });
+      setError("");
+    } else {
+      setError("Mauvais identifiants ");
+    }
   };
 
   const signup = (email: string, password: string) => {
-    setUser(null);
+    setRegisteredUser({ email, password });
+    setError("");
   };
 
   const logout = () => setUser(null);
@@ -30,7 +43,17 @@ export const AuthProvider = ({ children }: any) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, signup, logout, tasks, addTask, deleteTask, updateTask }}
+      value={{
+        user,
+        login,
+        signup,
+        logout,
+        error, 
+        tasks,
+        addTask,
+        deleteTask,
+        updateTask
+      }}
     >
       {children}
     </AuthContext.Provider>

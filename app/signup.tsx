@@ -28,6 +28,7 @@ export default function Signup() {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
+          if (!email || !password) return;
           signup(email, password);
           router.replace("/login");
         }}
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   button: {
-    backgroundColor: "#22c55e",
+    backgroundColor: "#FF7900",
     padding: 15,
     borderRadius: 10,
     alignItems: "center"

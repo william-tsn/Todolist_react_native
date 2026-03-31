@@ -5,7 +5,6 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Task App</Text>
-      <Text style={styles.subtitle}>Gère tes tâches facilement</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => router.push("/login")}>
         <Text style={styles.buttonText}>me connecter</Text>

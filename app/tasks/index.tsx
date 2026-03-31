@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
-import { useContext, useEffect } from "react";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, TextInput } from "react-native";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { router } from "expo-router";
 
 export default function Tasks() {
-  const { user, tasks } = useContext(AuthContext);
+  const { user, tasks, deleteTask, updateTask } = useContext(AuthContext);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [text, setText] = useState("");
 
   useEffect(() => {
     if (!user) router.replace("/login");
@@ -16,26 +18,57 @@ export default function Tasks() {
 
       <FlatList
         data={tasks}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View style={styles.task}>
-            <Text>{item}</Text>
+            {editingIndex === index ? (
+              <>
+                <TextInput
+                  style={styles.input}
+                  value={text}
+                  onChangeText={setText}
+                />
+                <TouchableOpacity
+                  style={styles.edit}
+                  onPress={() => {
+                    updateTask(index, text);
+                    setEditingIndex(null);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Valider</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <Text>{item}</Text>
+
+                <View style={styles.actions}>
+                  <TouchableOpacity
+                    style={styles.edit}
+                    onPress={() => {
+                      setEditingIndex(index);
+                      setText(item);
+                    }}
+                  >
+                    <Text style={styles.buttonText}>Modifier</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.delete}
+                    onPress={() => deleteTask(index)}
+                  >
+                    <Text style={styles.buttonText}>Supprimer</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
       />
-      <View style={styles.buttons}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/tasks/new")}>
-          <Text style={styles.buttonText}>Ajouter</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/profile")}>
-          <Text style={styles.buttonText}>Profil</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.logout} onPress={() => router.push("/logout")}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={() => router.push("/tasks/new")}>
+        <Text style={styles.buttonText}>Ajouter</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -52,25 +85,42 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   task: {
+    borderWidth: 1,
+    borderColor: "#cbd5f5",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10
   },
-  buttons: {
-    marginTop: 20,
+  actions: {
+    flexDirection: "row",
+    marginTop: 10,
     gap: 10
+  },
+  edit: {
+    backgroundColor: "#3b82f6",
+    padding: 8,
+    borderRadius: 8,
+    marginTop: 10
+  },
+  delete: {
+    backgroundColor: "#ef4444",
+    padding: 8,
+    borderRadius: 8,
+    marginTop: 10
   },
   button: {
     backgroundColor: "#FF7900",
     padding: 15,
     borderRadius: 10,
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 20
   },
-  logout: {
-    backgroundColor: "#ef4444",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center"
+  input: {
+    borderWidth: 1,
+    borderColor: "#cbd5f5",
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 10
   },
   buttonText: {
     color: "white",

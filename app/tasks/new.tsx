@@ -17,7 +17,7 @@ export default function NewTask() {
 
       <TextInput
         style={styles.input}
-        placeholder="Entrer une tâche"
+        placeholder="tâche....."
         onChangeText={setTask}
       />
 
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   button: {
-    backgroundColor: "#22c55e",
+    backgroundColor: "#FF7900",
     padding: 15,
     borderRadius: 10,
     alignItems: "center"

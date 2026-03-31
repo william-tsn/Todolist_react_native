@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   task: {
-    backgroundColor: "#f1f5f9",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10
